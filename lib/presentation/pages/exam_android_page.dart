@@ -3,15 +3,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
-class ExamWindowsPage extends StatefulWidget {
-  static const routeName = '/exam_windows_page';
-  ExamWindowsPage({Key? key}) : super(key: key);
+class ExamAndroidPage extends StatefulWidget {
+  static const routeName = '/exam_android_page';
+  ExamAndroidPage({Key? key}) : super(key: key);
 
   @override
-  _ExamWindowsPageState createState() => _ExamWindowsPageState();
+  _ExamAndroidPageState createState() => _ExamAndroidPageState();
 }
 
-class _ExamWindowsPageState extends State<ExamWindowsPage> {
+class _ExamAndroidPageState extends State<ExamAndroidPage> {
   final GlobalKey webViewKey = GlobalKey();
   InAppWebViewController? webViewController;
   double _progress = 0; // Menyimpan progress loading

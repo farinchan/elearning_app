@@ -1,4 +1,6 @@
+import 'package:elearning_app/presentation/pages/exam_android_page.dart';
 import 'package:elearning_app/presentation/pages/exam_windows_page.dart';
+import 'package:elearning_app/presentation/pages/splash_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -48,11 +50,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Window Manager Example',
+      title: 'Exam App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ExamWindowsPage(),
+      home: SplashScreen(),
+      routes: {
+        SplashScreen.routeName: (context) => const SplashScreen(),
+        ExamWindowsPage.routeName: (context) =>  ExamWindowsPage(),
+        ExamAndroidPage.routeName: (context) =>  ExamAndroidPage(),
+      },
     );
   }
 }
