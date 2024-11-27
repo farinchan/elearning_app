@@ -32,7 +32,7 @@ class _ExamWindowsPageState extends State<ExamWindowsPage> {
             },
           ),
           IconButton(
-            icon: Icon(Icons.power),
+            icon: Icon(Icons.power_settings_new),
             onPressed: () async {
               return await showDialog(
                 context: context,
@@ -50,7 +50,7 @@ class _ExamWindowsPageState extends State<ExamWindowsPage> {
                       TextButton(
                         onPressed: () {
                           SystemNavigator.pop();
-                          exit(0);
+                          exit(0); // Menutup aplikasi secara paksa
                         },
                         child: Text('Keluar'),
                       ),
