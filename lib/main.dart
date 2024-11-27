@@ -17,27 +17,27 @@ void main() async {
     webViewEnvironment = await WebViewEnvironment.create(
         settings:
             WebViewEnvironmentSettings(userDataFolder: 'example-webview'));
+
+    await windowManager.ensureInitialized();
+
+    WindowOptions windowOptions = const WindowOptions(
+      size: Size(1920, 1080),
+      center: true,
+      fullScreen: true,
+      skipTaskbar: false,
+    );
+
+    windowManager.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.setFullScreen(true);
+      await windowManager.focus();
+      // await windowManager.setAlwaysOnTop(true);
+      await windowManager.setResizable(false);
+    });
   }
 
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
     await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
   }
-
-  await windowManager.ensureInitialized();
-
-  WindowOptions windowOptions = const WindowOptions(
-    size: Size(1920, 1080),
-    center: true,
-    fullScreen: true,
-    skipTaskbar: false,
-  );
-
-  windowManager.waitUntilReadyToShow(windowOptions, () async {
-    await windowManager.setFullScreen(true);
-    await windowManager.focus();
-    await windowManager.setAlwaysOnTop(true);
-    await windowManager.setResizable(false);
-  });
 
   runApp(const MyApp());
 }
@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const ExamWindowsPage(),
+      home: ExamWindowsPage(),
     );
   }
 }
