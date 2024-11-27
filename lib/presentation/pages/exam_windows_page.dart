@@ -50,7 +50,7 @@ class _ExamWindowsPageState extends State<ExamWindowsPage> {
                       TextButton(
                         onPressed: () {
                           SystemNavigator.pop();
-                          exit(0); // Menutup aplikasi secara paksa
+                          exit(0);
                         },
                         child: Text('Keluar'),
                       ),

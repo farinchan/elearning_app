@@ -1,6 +1,7 @@
 import 'package:elearning_app/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class ExamAndroidPage extends StatefulWidget {
@@ -29,9 +30,31 @@ class _ExamAndroidPageState extends State<ExamAndroidPage> {
             },
           ),
           IconButton(
-            icon: Icon(Icons.power),
-            onPressed: () {
-              webViewController?.reload();
+            icon: const Icon(Icons.logout_outlined),
+            onPressed: () async{
+              return await showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text('Konfirmasi'),
+                    content: Text('Apakah Anda yakin ingin keluar?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Batal'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          SystemNavigator.pop();
+                        },
+                        child: Text('Keluar'),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           )
         ],

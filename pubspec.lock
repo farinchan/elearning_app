@@ -208,10 +208,11 @@ packages:
   kiosk_mode:
     dependency: "direct main"
     description:
-      name: kiosk_mode
-      sha256: "646b776ccca1309a22dc440a0a6e0fb2cda9634326ad9546bf4961db7707b2af"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: main
+      resolved-ref: "9efcc68bfc8139d1198e57c488e616943f8f580d"
+      url: "https://github.com/farinchan/kiosk-android.git"
+    source: git
     version: "0.5.1+1"
   leak_tracker:
     dependency: transitive

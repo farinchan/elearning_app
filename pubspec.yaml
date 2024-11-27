@@ -32,7 +32,10 @@ dependencies:
     sdk: flutter
   window_manager: ^0.4.3
   awesome_snackbar_content: ^0.1.4
-  kiosk_mode: ^0.5.1
+  kiosk_mode:
+    git:
+      url: https://github.com/farinchan/kiosk-android.git
+      ref: main # branch name
 
 
   # The following adds the Cupertino Icons font to your application.
