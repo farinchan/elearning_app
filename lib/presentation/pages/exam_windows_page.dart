@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:elearning_app/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class ExamWindowsPage extends StatefulWidget {
@@ -30,8 +33,31 @@ class _ExamWindowsPageState extends State<ExamWindowsPage> {
           ),
           IconButton(
             icon: Icon(Icons.power),
-            onPressed: () {
-              webViewController?.reload();
+            onPressed: () async {
+              return await showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text('Konfirmasi'),
+                    content: Text('Apakah Anda yakin ingin keluar?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Batal'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          SystemNavigator.pop();
+                          exit(0); // Menutup aplikasi secara paksa
+                        },
+                        child: Text('Keluar'),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           )
         ],
