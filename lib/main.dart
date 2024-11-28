@@ -1,4 +1,3 @@
-import 'package:elearning_app/common/helper/hotkey_blocker.dart';
 import 'package:elearning_app/presentation/pages/exam_android_page.dart';
 import 'package:elearning_app/presentation/pages/exam_windows_page.dart';
 import 'package:elearning_app/presentation/pages/splash_screen.dart';
@@ -16,7 +15,7 @@ void main() async {
     final availableVersion = await WebViewEnvironment.getAvailableVersion();
     assert(availableVersion != null,
         'Failed to find an installed WebView2 Runtime or non-stable Microsoft Edge installation.');
-
+  
     webViewEnvironment = await WebViewEnvironment.create(
         settings:
             WebViewEnvironmentSettings(userDataFolder: 'example-webview'));
