@@ -2,7 +2,7 @@
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"/>
     <uses-permission android:name="android.permission.INTERNET"/> <!-- Add this -->
     <application
-        android:label="elearning_app"
+        android:label="E-Learning MAN 1 Padang Panjang"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
