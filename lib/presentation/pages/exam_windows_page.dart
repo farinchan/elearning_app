@@ -49,7 +49,7 @@ class _ExamWindowsPageState extends State<ExamWindowsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ujian MAN 1 Kota Padang Panjang'),
+        title: Text('E-Learning MAN 1 Padang Panjang'),
         actions: [
           IconButton(
             icon: Icon(Icons.refresh),
