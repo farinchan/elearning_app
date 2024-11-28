@@ -1,3 +1,4 @@
+import 'package:elearning_app/common/helper/hotkey_blocker.dart';
 import 'package:elearning_app/presentation/pages/exam_android_page.dart';
 import 'package:elearning_app/presentation/pages/exam_windows_page.dart';
 import 'package:elearning_app/presentation/pages/splash_screen.dart';
@@ -32,7 +33,7 @@ void main() async {
     windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.setFullScreen(true);
       await windowManager.focus();
-      // await windowManager.setAlwaysOnTop(true);
+      await windowManager.setAlwaysOnTop(true);
       await windowManager.setResizable(false);
     });
   }
@@ -57,8 +58,8 @@ class MyApp extends StatelessWidget {
       home: SplashScreen(),
       routes: {
         SplashScreen.routeName: (context) => const SplashScreen(),
-        ExamWindowsPage.routeName: (context) =>  ExamWindowsPage(),
-        ExamAndroidPage.routeName: (context) =>  ExamAndroidPage(),
+        ExamWindowsPage.routeName: (context) => ExamWindowsPage(),
+        ExamAndroidPage.routeName: (context) => ExamAndroidPage(),
       },
     );
   }

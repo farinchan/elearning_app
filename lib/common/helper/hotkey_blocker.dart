@@ -4,11 +4,15 @@ import 'package:flutter/services.dart';
 
 class HotkeyBlocker {
   static const platform =
-      MethodChannel('com.gariskode.elearning_flutter/hotkey');
+      EventChannel('com.gariskode.elearning_flutter/hotkey');
 
-  static Future<void> blockHotkeys() async {
+  static void blockHotkeys() async {
     try {
-      await platform.invokeMethod('blockHotkeys');
+      platform.receiveBroadcastStream().listen((event) {
+        log('Hotkey pressed: $event');
+      });
+      // final result = await platform.invokeMethod<bool>('blockHotkeys');
+      // log('Hotkeys blocked: $result');
     } on PlatformException catch (e) {
       log("Failed to block hotkeys: '${e.message}'.");
     }

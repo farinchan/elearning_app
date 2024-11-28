@@ -1,8 +1,16 @@
+#include <flutter/event_channel.h>
+#include <flutter/event_sink.h>
+#include <flutter/event_stream_handler_functions.h>
+#include <flutter/method_channel.h>
+#include <flutter/standard_method_codec.h>
 #include "flutter_window.h"
 
+#include <thread>
+#include <atomic>
 #include <optional>
 
 #include "flutter/generated_plugin_registrant.h"
+
 
 FlutterWindow::FlutterWindow(const flutter::DartProject& project)
     : project_(project) {}
@@ -25,6 +33,41 @@ bool FlutterWindow::OnCreate() {
     return false;
   }
   RegisterPlugins(flutter_controller_->engine());
+
+// Define the EventChannel for hotkey events
+  auto event_channel = std::make_unique<flutter::EventChannel<flutter::EncodableValue>>(
+      flutter_controller_->engine()->messenger(),
+      "com.gariskode.elearning_flutter/hotkey",
+      &flutter::StandardMethodCodec::GetInstance());
+
+  // Declare is_listening as atomic outside the lambda
+  std::atomic<bool> is_listening{false};
+
+  event_channel->SetStreamHandler(
+      std::make_unique<flutter::StreamHandlerFunctions<flutter::EncodableValue>>(
+          [&](const flutter::EncodableValue* arguments,
+              std::unique_ptr<flutter::EventSink<flutter::EncodableValue>>&& events) {
+            is_listening = true;
+
+            // Start a thread to listen to hotkey events
+            std::thread([events = std::move(events), &is_listening]() mutable {
+              while (is_listening) {
+                // Check for Alt key press
+                if (GetAsyncKeyState(VK_MENU) & 0x8000) {
+                  events->Success(flutter::EncodableValue("Alt key pressed"));
+                } else {
+                  events->Success(flutter::EncodableValue("Alt key not pressed"));
+                }
+                Sleep(1000);  // Check every 1 second
+              }
+            }).detach();
+            return nullptr;
+          },
+          [&is_listening](const flutter::EncodableValue* arguments) {
+            is_listening = false;
+            return nullptr;
+          }));
+
   SetChildContent(flutter_controller_->view()->GetNativeWindow());
 
   flutter_controller_->engine()->SetNextFrameCallback([&]() {
