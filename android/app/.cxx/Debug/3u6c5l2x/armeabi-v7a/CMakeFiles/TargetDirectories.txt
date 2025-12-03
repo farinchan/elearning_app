@@ -1,0 +1,2 @@
+D:/project joki/MAN 1 Padang Panjang/elearning_app/android/app/.cxx/Debug/3u6c5l2x/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/project joki/MAN 1 Padang Panjang/elearning_app/android/app/.cxx/Debug/3u6c5l2x/armeabi-v7a/CMakeFiles/rebuild_cache.dir

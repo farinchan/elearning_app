@@ -1,6 +1,8 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:elearning_app/common/helper/secure_mode.dart';
 import 'package:elearning_app/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -28,24 +30,90 @@ void InfoKioskMode(context) async {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return PopScope(
-          canPop: false,
-          child: AlertDialog(
-            title: Text('Peringatan!'),
-            content: Text(
-                'Kiosk Mode belum aktif, aktifkan kiosk mode terlebih dahulu untuk melanjutkan ujian'),
-            actions: [
-              ElevatedButton(
-                onPressed: () async {
-                  await startKioskMode();
-                  Navigator.of(context).pop();
-                },
-                child: Text('Aktifkan'),
-              ),
-            ],
-          ),
-        );
+        return _CountdownDialog();
       },
+    );
+  }
+}
+
+class _CountdownDialog extends StatefulWidget {
+  @override
+  _CountdownDialogState createState() => _CountdownDialogState();
+}
+
+class _CountdownDialogState extends State<_CountdownDialog> {
+  int _countdown = 15;
+  bool _isDisposed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _startCountdown();
+  }
+
+  void _startCountdown() {
+    Future.delayed(Duration(seconds: 1), () {
+      if (_isDisposed) return; // Jangan lanjutkan jika dialog sudah dispose
+
+      if (_countdown > 1) {
+        if (mounted) {
+          setState(() {
+            _countdown--;
+          });
+        }
+        _startCountdown();
+      } else {
+        // Crash aplikasi
+        SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+        exit(0);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: false,
+      child: AlertDialog(
+        title: Text('Peringatan!'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Kiosk Mode belum aktif!',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Text('Aplikasi akan ditutup dalam:'),
+            SizedBox(height: 10),
+            Text(
+              '$_countdown',
+              style: TextStyle(
+                fontSize: 48,
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
+            ),
+            SizedBox(height: 10),
+            Text('detik'),
+          ],
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () async {
+              await startKioskMode();
+              Navigator.of(context).pop();
+            },
+            child: Text('Aktifkan Kiosk Mode'),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -59,6 +127,7 @@ class _ExamAndroidPageState extends State<ExamAndroidPage>
   final GlobalKey webViewKey = GlobalKey();
   InAppWebViewController? webViewController;
   double _progress = 0; // Menyimpan progress loading
+  bool _isShowingKioskDialog = false; // Flag untuk mencegah dialog duplikat
 
   Future<bool> _showExitConfirmation(BuildContext context) async {
     return await showDialog(
@@ -100,12 +169,14 @@ class _ExamAndroidPageState extends State<ExamAndroidPage>
       statusBarIconBrightness: Brightness.dark,
     ));
     enableKioskMode(context);
+    enableSecureMode();
     WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    disableSecureMode();
     super.dispose();
   }
 
@@ -114,21 +185,45 @@ class _ExamAndroidPageState extends State<ExamAndroidPage>
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.inactive) {
       log('App is paused or inactive');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          content: AwesomeSnackbarContent(
-            title: 'Peringatan!',
-            message: 'Kamu Terdeteksi melakukan tindakan ilegal! \n'
-                'Jika kamu terus melakukan tindakan ini, maka kamu akan dikeluarkan dari ujian!',
-            contentType: ContentType.failure,
-          ),
-        ),
-      );
 
-      InfoKioskMode(context);
+      // Cek kiosk mode tanpa menampilkan dialog
+      getKioskMode().then((kioskMode) {
+        if (kioskMode == KioskMode.disabled && !_isShowingKioskDialog) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              elevation: 0,
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: Colors.transparent,
+              content: AwesomeSnackbarContent(
+                title: 'Peringatan!',
+                message: 'Kamu Terdeteksi melakukan tindakan ilegal! \n'
+                    'Jika kamu terus melakukan tindakan ini, maka kamu akan dikeluarkan dari ujian!',
+                contentType: ContentType.failure,
+              ),
+            ),
+          );
+
+          _checkAndShowKioskDialog();
+        }
+      });
+    }
+  }
+
+  void _checkAndShowKioskDialog() async {
+    if (_isShowingKioskDialog) return; // Jangan tampilkan jika sudah ada dialog
+
+    var kioskMode = await getKioskMode();
+    if (kioskMode == KioskMode.disabled) {
+      _isShowingKioskDialog = true;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return _CountdownDialog();
+        },
+      ).then((_) {
+        _isShowingKioskDialog = false;
+      });
     }
   }
 

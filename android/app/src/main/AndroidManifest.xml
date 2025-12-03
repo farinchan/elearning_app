@@ -1,6 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"/>
     <uses-permission android:name="android.permission.INTERNET"/> <!-- Add this -->
+     <!-- Needed for putting the app on top of overlaying apps -->
+    <uses-permission android:name="android.permission.HIDE_OVERLAY_WINDOWS"/>
+    <!-- Needed for detecting ongoing calls -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- Needed for detecting if microphone is being used -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <application
         android:label="E-Learning MAN 1 Padang Panjang"
         android:name="${applicationName}"
