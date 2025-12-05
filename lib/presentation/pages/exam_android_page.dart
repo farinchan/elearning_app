@@ -42,7 +42,7 @@ class _CountdownDialog extends StatefulWidget {
 }
 
 class _CountdownDialogState extends State<_CountdownDialog> {
-  int _countdown = 15;
+  int _countdown = 12;
   bool _isDisposed = false;
 
   @override
@@ -259,8 +259,11 @@ class _ExamAndroidPageState extends State<ExamAndroidPage>
             webViewController = controller;
           },
           initialUrlRequest: URLRequest(
-              url: WebUri(
-                  "https://elearning.man1kotapadangpanjang.sch.id/login")),
+            url: WebUri("https://elearning.man1kotapadangpanjang.sch.id/login"),
+            headers: {
+              "X-Requested-With": "com.gariskode.elearning_app",
+            },
+          ),
           onPermissionRequest: (controller, request) async {
             return PermissionResponse(
                 resources: request.resources,

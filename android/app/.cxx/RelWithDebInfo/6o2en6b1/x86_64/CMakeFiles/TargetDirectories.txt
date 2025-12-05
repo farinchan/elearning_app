@@ -1,0 +1,2 @@
+D:/project joki/MAN 1 Padang Panjang/elearning_app/android/app/.cxx/RelWithDebInfo/6o2en6b1/x86_64/CMakeFiles/edit_cache.dir
+D:/project joki/MAN 1 Padang Panjang/elearning_app/android/app/.cxx/RelWithDebInfo/6o2en6b1/x86_64/CMakeFiles/rebuild_cache.dir

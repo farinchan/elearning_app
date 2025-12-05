@@ -52,9 +52,22 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Container(
-          width: 228,
-          child: Image.asset('assets/images/logo.png'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 228,
+              child: Image.asset('assets/images/logo.png'),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Versi 1.5.5',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+              ),
+            ),
+          ],
         ),
       ),
     );

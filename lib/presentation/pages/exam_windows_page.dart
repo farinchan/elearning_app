@@ -122,8 +122,11 @@ class _ExamWindowsPageState extends State<ExamWindowsPage> {
             webViewController = controller;
           },
           initialUrlRequest: URLRequest(
-              url: WebUri(
-                  "https://elearning.man1kotapadangpanjang.sch.id/login")),
+            url: WebUri("https://elearning.man1kotapadangpanjang.sch.id/login"),
+            headers: {
+              "X-Requested-With": "com.gariskode.elearning_app",
+            },
+          ),
           onPermissionRequest: (controller, request) async {
             return PermissionResponse(
                 resources: request.resources,
